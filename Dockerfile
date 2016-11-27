@@ -4,14 +4,20 @@ MAINTAINER KiwenLau <kiwenlau@gmail.com>
 
 WORKDIR /root
 
+COPY config/* /tmp/
+
 # install openssh-server, openjdk and wget
+RUN rm /etc/apt/sources.list
+RUN mv /tmp/sources.list /etc/apt/
 RUN apt-get update && apt-get install -y openssh-server openjdk-7-jdk wget
 
 # install hadoop 2.7.2
-RUN wget https://github.com/kiwenlau/compile-hadoop/releases/download/2.7.2/hadoop-2.7.2.tar.gz && \
-    tar -xzvf hadoop-2.7.2.tar.gz && \
-    mv hadoop-2.7.2 /usr/local/hadoop && \
-    rm hadoop-2.7.2.tar.gz
+#RUN wget https://github.com/kiwenlau/compile-hadoop/releases/download/2.7.2/hadoop-2.7.2.tar.gz && \
+#    tar -xzvf hadoop-2.7.2.tar.gz && \
+#    mv hadoop-2.7.2 /usr/local/hadoop && \
+#    rm hadoop-2.7.2.tar.gz
+ADD hadoop-2.7.2.tar.gz /usr/local
+RUN mv /usr/local/hadoop-2.7.2 /usr/local/hadoop
 
 # set environment variable
 ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 
@@ -22,11 +28,12 @@ ENV PATH=$PATH:/usr/local/hadoop/bin:/usr/local/hadoop/sbin
 RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-RUN mkdir -p ~/hdfs/namenode && \ 
-    mkdir -p ~/hdfs/datanode && \
-    mkdir $HADOOP_HOME/logs
+#RUN mkdir -p ~/hdfs/namenode && \ 
+#    mkdir -p ~/hdfs/datanode && \
+#    mkdir $HADOOP_HOME/logs
+RUN  mkdir $HADOOP_HOME/logs 
 
-COPY config/* /tmp/
+#COPY config/* /tmp/
 
 RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/hadoop-env.sh /usr/local/hadoop/etc/hadoop/hadoop-env.sh && \
@@ -34,7 +41,7 @@ RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml && \
     mv /tmp/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
     mv /tmp/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
-    mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves && \
+    mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves && \ 
     mv /tmp/start-hadoop.sh ~/start-hadoop.sh && \
     mv /tmp/run-wordcount.sh ~/run-wordcount.sh
 
