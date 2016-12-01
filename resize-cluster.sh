@@ -12,9 +12,11 @@ fi
 # change slaves file
 i=1
 rm config/slaves
+rm config/regionservers
 while [ $i -lt $N ]
 do
 	echo "hadoop-slave$i" >> config/slaves
+        echo "hadoop-slave$i" >> config/regionservers
 	((i++))
 done 
 
