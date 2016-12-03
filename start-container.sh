@@ -3,7 +3,7 @@
 # the default node number is 3
 N=${1:-3}
 HADOOP_IAMGES_NAME=zfylin/hadoop:1.0
-NET_NAME=zfylin_hadoop
+NET_NAME=hadoop
 VOLUMN_PATH=/data/zfylin/hadoop-cluster
 
 # start hadoop master container
@@ -13,6 +13,7 @@ sudo docker run -itd \
                 --net=${NET_NAME} \
                 -p 50070:50070 \
                 -p 8088:8088 \
+		-p 10000:10000 \
                 --name hadoop-master \
                 --hostname hadoop-master \
 		-v ${VOLUMN_PATH}/hadoop-master/hdfs:/root/hdfs \

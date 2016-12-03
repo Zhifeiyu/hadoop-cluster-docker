@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y openssh-server openjdk-7-jdk wget
 #    tar -xzvf hadoop-2.7.2.tar.gz && \
 #    mv hadoop-2.7.2 /usr/local/hadoop && \
 #    rm hadoop-2.7.2.tar.gz
-ADD program/hadoop-2.7.2.tar.gz /usr/local
-RUN mv /usr/local/hadoop-2.7.2 /usr/local/hadoop
+ADD program/hadoop-2.6.5.tar.gz /usr/local
+RUN mv /usr/local/hadoop-2.6.5 /usr/local/hadoop
 
 ADD program/hbase-1.2.4-bin.tar.gz /usr/local
 RUN mv /usr/local/hbase-1.2.4 /usr/local/hbase
@@ -85,3 +85,4 @@ RUN chmod +x ~/start-hadoop.sh && \
 
 CMD [ "sh", "-c", "service ssh start; bash"]
 
+EXPOSE 60000 50070 10000 8088
